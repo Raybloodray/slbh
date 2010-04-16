@@ -24,3 +24,6 @@ Limitations:
   * Seriously, it is rare that this happens for normal buildings. It is more with big maze that it happens.
  * If there are too much moves made (llSetPos), during the execution of the script, Second Life will ignore those calls after a big amount has been processed
   * This is really rare too since this tool tends to minimize the moves
+
+http://slbh.pgon.ca/Principal.jpg
+http://slbh.pgon.ca/Generated%20script.jpg
