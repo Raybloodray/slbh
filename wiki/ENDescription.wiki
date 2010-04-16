@@ -1,4 +1,3 @@
-#sidebar ENSideHome
 =SecondLife Builder Helper=
 
 Did you ever dream to easily create buildings in Second Life without needing to manually move walls, floors and stairs? Furthermore, if you don't own a land, keeping your big houses in many parts can become long and boring to always raise them.
