@@ -121,7 +121,7 @@ public class Principal extends JFrame implements ComponentListener, ActionListen
 		// NEW
 		if (arg0.getActionCommand().equals("new")) {
 			viewport.init();
-			options.makeCombo(0);
+			options.refreshFloorsList(0);
 		}
 		
 		// OPEN
@@ -139,7 +139,7 @@ public class Principal extends JFrame implements ComponentListener, ActionListen
 				}
 			}
 			
-			options.makeCombo(0);
+			options.refreshFloorsList(0);
 		}
 		
 		// SAVE
