@@ -17,7 +17,7 @@
 	Copyright 2010 Simon Levesque
 */
 
-package slbh.gui;
+package slbh.gui.views;
 
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
@@ -25,7 +25,11 @@ import java.awt.event.ItemEvent;
 import java.awt.event.ItemListener;
 import javax.swing.*;
 
+import slbh.gui.dialogs.Properties;
+import slbh.gui.dialogs.ViewLSL;
 import slbh.lang.Config;
+import slbh.lsl.LSLScript;
+import slbh.scene.Scene;
 
 @SuppressWarnings("serial")
 public class Options extends JPanel implements ActionListener, ItemListener {
@@ -43,9 +47,9 @@ public class Options extends JPanel implements ActionListener, ItemListener {
 	private JRadioButton stairsW;
 	private JButton properties;
 	private JButton sl;
-	private Viewport myViewport;
+	private TopView2DEdit myViewport;
 
-	public Options(Viewport myViewport) {
+	public Options(TopView2DEdit myViewport) {
 		this.myViewport = myViewport;
 		reloadLang();
 	}
@@ -71,17 +75,18 @@ public class Options extends JPanel implements ActionListener, ItemListener {
 		
 		if (e.getActionCommand().compareTo("sl") == 0) {
 			// Create the scene
-			slbh.conf.Configuration myConf = myViewport.createScene();
+			LSLScript myConf = new LSLScript(myViewport.getScene());
 
 			// Show
-			ViewLSL v = new ViewLSL(myConf.ToSLScript((int) myViewport.getDeltaZ()*100*myViewport.numberOfFloors(), myViewport.getRepeat()));
+			Scene theScene = myViewport.getScene();
+			ViewLSL v = new ViewLSL(myConf.toSLScript((int) theScene.getDeltaZ()*100*theScene.getFloors().size(), theScene.getRepeat()));
 			v.setVisible(true);
 			return;
 		}
 		
 		if (e.getActionCommand().compareTo("properties") == 0) {
 			// Open the properties window
-			Properties p = new Properties(myViewport);
+			Properties p = new Properties(myViewport.getScene());
 			p.setVisible(true);
 			return;
 		}
@@ -89,19 +94,19 @@ public class Options extends JPanel implements ActionListener, ItemListener {
 		myViewport.changeObject(e.getActionCommand());
 
 	}
-
+	
 	public void itemStateChanged(ItemEvent arg0) {
 		if (arg0.getStateChange() == ItemEvent.SELECTED)
 			myViewport.changeFloor(Integer.valueOf((String) floors.getSelectedItem()).intValue());
 	}
-
+	
 	public void refreshFloorsList(int selected) {
 		floors.removeAllItems();
-		int size = myViewport.numberOfFloors();
+		int size = myViewport.getScene().getFloors().size();
 		for (int i=0; i<size; i++) floors.addItem(String.valueOf(i));
 		floors.setSelectedIndex(selected);
 	}
-
+	
 	public void reloadLang() {
 		// Clear all
 		if (getComponentCount() != 0) removeAll();
