@@ -29,6 +29,10 @@ import slbh.scene.SceneObject;
 public class TopView2D {
 	private Scene myScene;
 	private int currentFloor;
+	private Color colorFloor = Color.white;
+	private Color colorWall = Color.blue;
+	private Color colorStairs = Color.green;
+	private Color colorStart = Color.red;
 	
 	public TopView2D(Scene scene) {
 		myScene = scene;
@@ -41,12 +45,19 @@ public class TopView2D {
 	public Scene getMyScene() {
 		return myScene;
 	}
+	
+	public void setColors(Color colorFloor, Color colorWall, Color colorStairs, Color colorStart) {
+		this.colorFloor = colorFloor;
+		this.colorWall = colorWall;
+		this.colorStairs = colorStairs;
+		this.colorStart = colorStart;
+	}
 
 	public void paintObjects(Graphics g, Vector<SceneObject> toDraw, int zoom) {
         for (SceneObject current : toDraw) {        	
         	// FLOOR
         	if (current.type.compareTo("floor") == 0) {
-        		g.setColor(Color.white);
+        		g.setColor(colorFloor);
         		int x = (int) current.position[0]*zoom;
         		int y = (int) current.position[1]*zoom;
         		g.fillRect(x+1, y+1, zoom-1, zoom-1);
@@ -54,7 +65,7 @@ public class TopView2D {
         	
         	// WALL
         	if (current.type.compareTo("wall") == 0) {
-        		g.setColor(Color.blue);
+        		g.setColor(colorWall);
         		int x = (int) current.position[0]*zoom;
         		int y = (int) current.position[1]*zoom;
         		if (current.position[0]*zoom != x ) {
@@ -66,19 +77,19 @@ public class TopView2D {
 
         	// STAIRS
         	if (current.type.compareTo("stairsN") == 0) {
-        		g.setColor(Color.green);
+        		g.setColor(colorStairs);
         		g.fillRect( (int) (current.position[0]*zoom + .2*zoom), (int) current.position[1]*zoom, (int) (zoom*.6), (int) (.5*zoom));
         	}
         	if (current.type.compareTo("stairsS") == 0) {
-        		g.setColor(Color.green);
+        		g.setColor(colorStairs);
         		g.fillRect( (int) (current.position[0]*zoom + .2*zoom), (int) (current.position[1]*zoom + .5*zoom), (int) (zoom*.6), (int) (.5*zoom));
         	}
         	if (current.type.compareTo("stairsW") == 0) {
-        		g.setColor(Color.green);
+        		g.setColor(colorStairs);
         		g.fillRect((int) current.position[0]*zoom , (int) (current.position[1]*zoom + .2*zoom), (int) (zoom*.5), (int) (.6*zoom));
         	}
         	if (current.type.compareTo("stairsE") == 0) {
-        		g.setColor(Color.green);
+        		g.setColor(colorStairs);
         		g.fillRect((int) (current.position[0]*zoom + .5*zoom) , (int) (current.position[1]*zoom + .2*zoom), (int) (zoom*.5), (int) (.6*zoom));
         	}
         }
@@ -88,7 +99,7 @@ public class TopView2D {
         if (currentFloor == myScene.startPosition[2]){
         	int x = myScene.startPosition[0]*zoom;
         	int y = myScene.startPosition[1]*zoom;
-        	g.setColor(Color.red);
+        	g.setColor(colorStart);
         	g.drawLine(x, y, x+zoom, y+zoom);
         	g.drawLine(x, y+zoom, x+zoom, y);
         }

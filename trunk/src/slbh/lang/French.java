@@ -26,6 +26,7 @@ public class French implements Language {
 	public String buttonProperties() {return "Propriétés";}
 	public String buttonRemoveFloor() {return "Enlever l'étage";}
 	public String buttonToClipboard() {return "Copier au presse-papier";}
+	public String labelBackgroundFloor() {return "Étage en fond: ";}
 	public String labelCurrentFloor() {return "Étage courant: ";}
 	public String labelObjects() {return "Objet";}
 	public String lang() {return "Francais";}

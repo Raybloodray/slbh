@@ -46,6 +46,8 @@ import slbh.scene.SceneObject;
 
 @SuppressWarnings("serial")
 public class Principal extends JFrame implements ComponentListener, ActionListener {
+	static final public String version = "DEV";
+	
 	// Program Entry
 	public static void main(String[] args) {
 		Config.load();
@@ -62,7 +64,7 @@ public class Principal extends JFrame implements ComponentListener, ActionListen
 	// The constructor
 	public Principal() {
 		// Set the window
-		setTitle("Second Life Builder Helper");
+		setTitle("Second Life Builder Helper (" + version + ")");
 		setSize(500, 600);
 		setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 		getContentPane().setLayout(null);

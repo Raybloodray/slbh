@@ -26,6 +26,7 @@ public interface Language {
 	public String buttonProperties();
 	public String buttonRemoveFloor();
 	public String buttonToClipboard();
+	public String labelBackgroundFloor();
 	public String labelCurrentFloor();
 	public String labelObjects();
 	public String lang();
