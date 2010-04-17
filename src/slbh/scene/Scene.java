@@ -22,11 +22,7 @@ package slbh.scene;
 import java.util.Iterator;
 import java.util.Vector;
 
-import javax.swing.JComponent;
-
-
-@SuppressWarnings("serial")
-public class Scene extends JComponent {
+public class Scene {
 	private Vector<Vector<SceneObject>> floors;
 	public int startPosition[] = new int[3];
 	
@@ -58,6 +54,7 @@ public class Scene extends JComponent {
 
 	private void clearScene() {
 		floors = new Vector<Vector<SceneObject>>();
+		for (int i=0; i<3; ++i) startPosition[i] = 0;
 	}
 	
 	public Vector<SceneObject> addFloor() {

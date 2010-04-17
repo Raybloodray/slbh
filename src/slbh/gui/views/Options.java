@@ -21,9 +21,18 @@ package slbh.gui.views;
 
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
-import java.awt.event.ItemEvent;
-import java.awt.event.ItemListener;
-import javax.swing.*;
+
+import javax.swing.ButtonGroup;
+import javax.swing.DefaultListModel;
+import javax.swing.JButton;
+import javax.swing.JLabel;
+import javax.swing.JList;
+import javax.swing.JPanel;
+import javax.swing.JRadioButton;
+import javax.swing.JScrollPane;
+import javax.swing.ListSelectionModel;
+import javax.swing.event.ListSelectionEvent;
+import javax.swing.event.ListSelectionListener;
 
 import slbh.gui.dialogs.Properties;
 import slbh.gui.dialogs.ViewLSL;
@@ -32,9 +41,10 @@ import slbh.lsl.LSLScript;
 import slbh.scene.Scene;
 
 @SuppressWarnings("serial")
-public class Options extends JPanel implements ActionListener, ItemListener {
-	private JComboBox floors;
-	private ButtonGroup group;
+public class Options extends JPanel implements ActionListener {
+	private JList editFloorsList;
+	private JList backFloorsList;
+	private DefaultListModel floorsModel = new DefaultListModel(); 
 	private JButton floorCreateB;
 	private JButton floorCreateA;
 	private JButton floorRemove;
@@ -48,6 +58,7 @@ public class Options extends JPanel implements ActionListener, ItemListener {
 	private JButton properties;
 	private JButton sl;
 	private TopView2DEdit myViewport;
+	private int backOffset = 0;
 
 	public Options(TopView2DEdit myViewport) {
 		this.myViewport = myViewport;
@@ -56,19 +67,19 @@ public class Options extends JPanel implements ActionListener, ItemListener {
 	
 	public void actionPerformed(ActionEvent e) {
 		if (e.getActionCommand().compareTo("floorCreateB") == 0) {
-			int current = Integer.valueOf((String) floors.getSelectedItem()).intValue();
+			int current = (Integer) editFloorsList.getSelectedValue();
 			refreshFloorsList(myViewport.createFloor(current, false));
 			return;
 		}
 		
 		if (e.getActionCommand().compareTo("floorCreateA") == 0) {
-			int current = Integer.valueOf((String) floors.getSelectedItem()).intValue();
+			int current = (Integer) editFloorsList.getSelectedValue();
 			refreshFloorsList(myViewport.createFloor(current, true));
 			return;
 		}
 		
 		if (e.getActionCommand().compareTo("floorRemove") == 0) {
-			int current = Integer.valueOf((String) floors.getSelectedItem()).intValue();
+			int current = (Integer) editFloorsList.getSelectedValue();
 			refreshFloorsList(myViewport.removeFloor(current));
 			return;
 		}
@@ -95,16 +106,15 @@ public class Options extends JPanel implements ActionListener, ItemListener {
 
 	}
 	
-	public void itemStateChanged(ItemEvent arg0) {
-		if (arg0.getStateChange() == ItemEvent.SELECTED)
-			myViewport.changeFloor(Integer.valueOf((String) floors.getSelectedItem()).intValue());
-	}
-	
 	public void refreshFloorsList(int selected) {
-		floors.removeAllItems();
-		int size = myViewport.getScene().getFloors().size();
-		for (int i=0; i<size; i++) floors.addItem(String.valueOf(i));
-		floors.setSelectedIndex(selected);
+		floorsModel.clear();
+		final int size = myViewport.getScene().getFloors().size();
+
+		for (int i=size-1; i>=0; --i) {
+			floorsModel.addElement(i);
+		}
+
+		editFloorsList.setSelectedIndex(size-selected-1);
 	}
 	
 	public void reloadLang() {
@@ -112,8 +122,17 @@ public class Options extends JPanel implements ActionListener, ItemListener {
 		if (getComponentCount() != 0) removeAll();
 		
 		// Create
-		floors = new JComboBox();
-		group = new ButtonGroup();
+		editFloorsList = new JList(floorsModel);
+		editFloorsList.setSelectionMode(ListSelectionModel.SINGLE_INTERVAL_SELECTION);
+		editFloorsList.setLayoutOrientation(JList.VERTICAL);
+		JScrollPane floorsScroller = new JScrollPane(editFloorsList);
+
+		backFloorsList = new JList(floorsModel);
+		backFloorsList.setSelectionMode(ListSelectionModel.SINGLE_INTERVAL_SELECTION);
+		backFloorsList.setLayoutOrientation(JList.VERTICAL);
+		JScrollPane backFloorsScroller = new JScrollPane(backFloorsList);
+		
+		ButtonGroup group = new ButtonGroup();
 		floorCreateB = new JButton(Config.getMyLanguage().buttonAddFloorBefore());
 		floorCreateA = new JButton(Config.getMyLanguage().buttonAddFloorAfter());
 		floorRemove = new JButton(Config.getMyLanguage().buttonRemoveFloor());
@@ -138,50 +157,55 @@ public class Options extends JPanel implements ActionListener, ItemListener {
 		
 		// Set the components
 		JLabel l;
-		int x = 10;
+		int y = 10;
 		
 		l = new JLabel(Config.getMyLanguage().labelCurrentFloor());
-		l.setBounds(0, x, 100, 20);
+		l.setBounds(0, y, 100, 20);
+		add(l);
+		l = new JLabel(Config.getMyLanguage().labelBackgroundFloor());
+		l.setBounds(100, y, 100, 20);
 		add(l);
 		
-		floors.addItem("0");
-		floors.setSelectedIndex(0);
-		floors.setBounds(100, x, 100, 20);
-		x += 20;
-		floorCreateB.setBounds(0, x, 200, 20);
-		x += 20;
-		floorCreateA.setBounds(0, x, 200, 20);
-		x += 20;
-		floorRemove.setBounds(0, x, 200, 20);
+		refreshFloorsList(0);
+		y += 20;
+		floorsScroller.setBounds(0, y, 100, 100);
+		backFloorsScroller.setBounds(100, y, 100, 100);
+		y += 100;
+		floorCreateB.setBounds(0, y, 200, 20);
+		y += 20;
+		floorCreateA.setBounds(0, y, 200, 20);
+		y += 20;
+		floorRemove.setBounds(0, y, 200, 20);
 		
-		x += 50;
+		y += 50;
 		l = new JLabel(Config.getMyLanguage().labelObjects());
-		l.setBounds(0, x, 100, 20);
+		l.setBounds(0, y, 100, 20);
 		add(l);
-		x += 20;
-		start.setBounds(0, x, 200, 20);
-		x += 20;
-		floor.setBounds(0, x, 200, 20);
-		x += 20;
-		wall.setBounds(0, x, 200, 20);
-		x += 20;
-		stairsN.setBounds(0, x, 200, 20);
-		x += 20;
-		stairsS.setBounds(0, x, 200, 20);
-		x += 20;
-		stairsE.setBounds(0, x, 200, 20);
-		x += 20;
-		stairsW.setBounds(0, x, 200, 20);
+		y += 20;
+		start.setBounds(0, y, 200, 20);
+		y += 20;
+		floor.setBounds(0, y, 200, 20);
+		y += 20;
+		wall.setBounds(0, y, 200, 20);
+		y += 20;
+		stairsN.setBounds(0, y, 200, 20);
+		y += 20;
+		stairsS.setBounds(0, y, 200, 20);
+		y += 20;
+		stairsE.setBounds(0, y, 200, 20);
+		y += 20;
+		stairsW.setBounds(0, y, 200, 20);
 		
-		x += 50;
-		properties.setBounds(0, x, 200, 20);
-		x += 20;
-		sl.setBounds(0, x, 200, 20);
+		y += 50;
+		properties.setBounds(0, y, 200, 20);
+		y += 20;
+		sl.setBounds(0, y, 200, 20);
 		
 		// Set the panel
 		setLayout(null);
 		
-		add(floors);
+		add(floorsScroller);
+		add(backFloorsScroller);
 		add(floorCreateB);
 		add(floorCreateA);
 		add(floorRemove);
@@ -212,8 +236,31 @@ public class Options extends JPanel implements ActionListener, ItemListener {
 		
 		myViewport.changeObject("floor");
 		floor.setSelected(true);
-		
-		floors.addItemListener(this);
+
+		editFloorsList.addListSelectionListener(new ListSelectionListener() {
+			@Override
+			public void valueChanged(ListSelectionEvent arg0) {
+				Object selectedFloor = editFloorsList.getSelectedValue();
+				if (selectedFloor != null) {
+					myViewport.changeFloor((Integer) selectedFloor);
+					int newIndex = (Integer) selectedFloor + backOffset;
+					if (newIndex < 0) newIndex = 0;
+					if (newIndex > floorsModel.size()-1) newIndex = floorsModel.size() - 1;
+					backFloorsList.setSelectedIndex(floorsModel.size()-newIndex-1);
+					backOffset = newIndex - (Integer) selectedFloor;
+				}
+			}
+		});
+		backFloorsList.addListSelectionListener(new ListSelectionListener() {
+			@Override
+			public void valueChanged(ListSelectionEvent arg0) {
+				Object selectedFloor = backFloorsList.getSelectedValue();
+				if (selectedFloor != null) {
+					myViewport.changeBackFloor((Integer) selectedFloor);
+					backOffset = (Integer) selectedFloor - (Integer) editFloorsList.getSelectedValue();
+				}
+			}
+		});
 		floorCreateB.addActionListener(this);
 		floorCreateA.addActionListener(this);
 		floorRemove.addActionListener(this);

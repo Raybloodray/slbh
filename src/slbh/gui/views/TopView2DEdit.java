@@ -42,12 +42,19 @@ public class TopView2DEdit extends JComponent implements MouseListener, MouseMot
 	private int editFloor;
 	private Scene myScene;
 	private TopView2D editView;
+	private TopView2D backgroundView;
 	
 	public TopView2DEdit() {
 		init();
 		
         addMouseListener(this);
         addMouseMotionListener(this);
+	}
+	
+	public int changeBackFloor(int selectedFloor) {
+		backgroundView.setCurrentFloor(selectedFloor);
+		repaint();
+		return selectedFloor;
 	}
 	
 	public int changeFloor(int number) {
@@ -60,7 +67,7 @@ public class TopView2DEdit extends JComponent implements MouseListener, MouseMot
 	public void changeObject(String object) {
     	objectSelected = object;
     }
-	
+
 	public int createFloor(int number, boolean after) {
     	int result = myScene.createFloor(number, after);
     	changeFloor(result);
@@ -116,7 +123,7 @@ public class TopView2DEdit extends JComponent implements MouseListener, MouseMot
     	
     	return result;
     }
-
+	
 	public void deleteNearObject(int _x, int _y) {
     	double x, y;
 		
@@ -153,21 +160,17 @@ public class TopView2DEdit extends JComponent implements MouseListener, MouseMot
 	}
 	
 	public void init() {
-		myScene = new Scene();
-		mouseStart = new int[2];
-		mouseEnd = new int[2];
-		mousePressed = false;
-		
+		myScene = new Scene();		
 		myScene.createFloor(0, false);
-		editView = new TopView2D(myScene);
 		
+		setScene(myScene);
 		changeFloor(0);
 	}
 	
 	@Override
 	public void mouseClicked(MouseEvent arg0) {}
 	
-	@Override
+    @Override
 	public void mouseDragged(MouseEvent arg0) {
 		if (mousePressed) {
 			if (objectSelected.compareTo("wall")==0) {
@@ -186,16 +189,16 @@ public class TopView2DEdit extends JComponent implements MouseListener, MouseMot
 		
 		repaint();
 	}
-	
+
     @Override
 	public void mouseEntered(MouseEvent arg0) {}
 
     @Override
 	public void mouseExited(MouseEvent arg0) {}
-
-    @Override
-	public void mouseMoved(MouseEvent arg0) {}
     
+	@Override
+	public void mouseMoved(MouseEvent arg0) {}
+
 	@Override
 	public void mousePressed(MouseEvent arg0) {
 		// LEFT BUTTON
@@ -214,9 +217,9 @@ public class TopView2DEdit extends JComponent implements MouseListener, MouseMot
 			deleteNearObject(arg0.getX(), arg0.getY());
 		}
 		repaint();
-	}
-
-	@Override
+	}	
+	
+    @Override
 	public void mouseReleased(MouseEvent arg0) {
 		mousePressed = false;
 		if (arg0.getButton() == MouseEvent.BUTTON1) {
@@ -230,8 +233,8 @@ public class TopView2DEdit extends JComponent implements MouseListener, MouseMot
 			
 			repaint();
 		}
-	}	
-	
+	}
+    
     @Override
 	public void paintComponent(Graphics g) {
         super.paintComponent(g); 
@@ -252,14 +255,17 @@ public class TopView2DEdit extends JComponent implements MouseListener, MouseMot
         for (int x=0; x<width; x += zoom) g.drawLine(x, 0, x, height);
         for (int y=0; y<height; y += zoom) g.drawLine(0, y, width, y);
         
+        // Show the background floor
+        backgroundView.paintScene(g, zoom);
+        
         // Show the edited floor
         editView.paintScene(g, zoom);
         
         // Show the temporary objects
         editView.paintObjects(g, createListObjects(false), zoom);
     }
-    
-    public int removeFloor(int number) {
+
+	public int removeFloor(int number) {
 		int result = myScene.removeFloor(number);		
 		changeFloor(result);
 		
@@ -273,6 +279,8 @@ public class TopView2DEdit extends JComponent implements MouseListener, MouseMot
 		mousePressed = false;
 		
 		editView = new TopView2D(myScene);
+		backgroundView = new TopView2D(myScene);
+		backgroundView.setColors(new Color(1.0f, 1.0f, 1.0f, 0.25f), new Color(0.0f, 0.0f, 1.0f, 0.25f), new Color(0.0f, 1.0f, 0.0f, 0.25f), new Color(1.0f, 0.0f, 0.0f, 0.25f));
 		
 		changeFloor(0);
 	}

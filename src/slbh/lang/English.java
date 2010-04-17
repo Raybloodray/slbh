@@ -26,6 +26,7 @@ public class English implements Language {
 	public String buttonProperties() {return "Properties";}
 	public String buttonRemoveFloor() {return "Remove floor";}
 	public String buttonToClipboard() {return "Copy to clipboard";}
+	public String labelBackgroundFloor() {return "Back floor:";}
 	public String labelCurrentFloor() {return "Current floor:";}
 	public String labelObjects() {return "Object";}
 	public String lang() {return "English";}
