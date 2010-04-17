@@ -17,7 +17,7 @@
 	Copyright 2010 Simon Levesque
 */
 
-package slbh.gui;
+package slbh.gui.dialogs;
 
 import java.awt.FlowLayout;
 import java.awt.Toolkit;

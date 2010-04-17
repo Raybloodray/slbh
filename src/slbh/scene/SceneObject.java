@@ -17,13 +17,13 @@
 	Copyright 2010 Simon Levesque
 */
 
-package slbh.gui;
+package slbh.scene;
 
-public class Object {
+public class SceneObject {
 	public String type = "";
 	public double position[] = new double[2];
 	
-	public Object(String type, double x, double y) {
+	public SceneObject(String type, double x, double y) {
 		this.position[0] = x;
 		this.position[1] = y;
 		this.type = type;

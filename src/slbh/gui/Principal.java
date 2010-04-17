@@ -23,9 +23,14 @@ import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.awt.event.ComponentEvent;
 import java.awt.event.ComponentListener;
+import java.io.BufferedReader;
 import java.io.FileInputStream;
 import java.io.FileWriter;
 import java.io.IOException;
+import java.io.InputStream;
+import java.io.InputStreamReader;
+import java.util.Vector;
+
 import javax.swing.JFileChooser;
 import javax.swing.JFrame;
 import javax.swing.JMenu;
@@ -33,14 +38,14 @@ import javax.swing.JMenuBar;
 import javax.swing.JMenuItem;
 import javax.swing.JOptionPane;
 
-import slbh.lang.*;
+import slbh.gui.views.Options;
+import slbh.gui.views.TopView2DEdit;
+import slbh.lang.Config;
+import slbh.scene.Scene;
+import slbh.scene.SceneObject;
 
 @SuppressWarnings("serial")
 public class Principal extends JFrame implements ComponentListener, ActionListener {
-	private Viewport viewport = new Viewport();
-	private Options options = new Options(viewport);
-	private JMenuBar bar;
-	
 	// Program Entry
 	public static void main(String[] args) {
 		Config.load();
@@ -49,6 +54,10 @@ public class Principal extends JFrame implements ComponentListener, ActionListen
 		Principal myWindow = new Principal();
 		myWindow.setVisible(true);
 	}
+	private TopView2DEdit editView = new TopView2DEdit();
+	private Options options = new Options(editView);
+	
+	private JMenuBar bar;
 	
 	// The constructor
 	public Principal() {
@@ -63,6 +72,111 @@ public class Principal extends JFrame implements ComponentListener, ActionListen
 		reloadLang();		
 	}
 	
+	public void actionPerformed(ActionEvent arg0) {
+		// NEW
+		if (arg0.getActionCommand().equals("new")) {
+			editView.init();
+			options.refreshFloorsList(0);
+		}
+		
+		// OPEN
+		if (arg0.getActionCommand().equals("open")) {
+			// Create a file chooser
+			JFileChooser fc = new JFileChooser();
+
+			// Open it
+			if (fc.showOpenDialog(this) == JFileChooser.APPROVE_OPTION) {
+				try {
+					open(new FileInputStream(fc.getSelectedFile()));
+					
+				} catch (IOException e) {
+					JOptionPane.showMessageDialog(null, "Error reading file");
+				}
+			}
+			
+			options.refreshFloorsList(0);
+		}
+		
+		// SAVE
+		if (arg0.getActionCommand().equals("save")) {
+			// Create a file chooser
+			JFileChooser fc = new JFileChooser();
+
+			// Save it
+			if (fc.showSaveDialog(this) == JFileChooser.APPROVE_OPTION) {
+				try {
+					FileWriter f = new FileWriter(fc.getSelectedFile());
+					f.write(save());
+					f.close();
+				} catch (IOException e) {
+					JOptionPane.showMessageDialog(null, "Error writing file");
+				}
+			}
+		}
+		
+		// CHANGE LANGUAGE
+		if (arg0.getActionCommand().startsWith("lang-")) {
+			Config.change(arg0.getActionCommand().substring(5));
+			reloadLang();
+		}
+
+		editView.repaint();
+	}
+	
+	public void componentHidden(ComponentEvent arg0) {}
+
+	public void componentMoved(ComponentEvent arg0) {}
+
+	public void componentResized(ComponentEvent arg0) {
+		reposition();
+		repaint();
+	}
+	public void componentShown(ComponentEvent arg0) {}
+	private void open(InputStream in) throws NumberFormatException, IOException {
+		BufferedReader myReader = new BufferedReader(new InputStreamReader(in));
+		String nextLine;
+		Vector<SceneObject> floorObjects = null;
+
+		// Get a fresh document
+		Scene newScene = new Scene();
+		
+		// Start position
+		nextLine = myReader.readLine();
+		String[] parts = nextLine.split(" ");
+		for (int i=0; i<3; i++) newScene.startPosition[i] = Integer.valueOf(parts[i]).intValue();
+
+		// Deltas
+		nextLine = myReader.readLine();
+		parts = nextLine.split(" ");
+		newScene.setDeltaXY(Double.valueOf(parts[0]).doubleValue());
+		newScene.setDeltaZ(Double.valueOf(parts[1]).doubleValue());
+		
+		// Repeat
+		// For previous save, that value was not there
+		nextLine = myReader.readLine();
+		if (nextLine.charAt(0) == '-') {
+			floorObjects = newScene.addFloor();
+		} else {
+			newScene.setRepeat(Integer.valueOf(nextLine));
+		}
+		
+		// Get the objects
+		while ( (nextLine = myReader.readLine()) != null) {
+			// Check if new floor
+			if (nextLine.charAt(0) == '-') {
+				floorObjects = newScene.addFloor();
+				continue;
+			}
+			
+			// Parse it
+			String[] obj = nextLine.split(" ");
+			
+			// Objects
+			floorObjects.add(new SceneObject(obj[0], Double.valueOf(obj[1]).doubleValue(), Double.valueOf(obj[2]).doubleValue()));
+		}
+		
+		editView.setScene(newScene);
+	}
 	public void reloadLang() {
 		// Clear
 		if (getComponentCount() != 1) removeAll();
@@ -98,11 +212,11 @@ public class Principal extends JFrame implements ComponentListener, ActionListen
 		setJMenuBar(bar);
 		
 		// Adjust the components
-		Reposition();
+		reposition();
 		
 		// Add the components
 		add(options);
-		add(viewport);
+		add(editView);
 		
 		// Traverse
 		options.reloadLang();
@@ -110,71 +224,35 @@ public class Principal extends JFrame implements ComponentListener, ActionListen
 		setSize(getWidth()-1, getHeight());
 		repaint();
 	}
-	
-	public void Reposition() {
+
+	public void reposition() {
 		int width = 200;
 		options.setBounds(0,0,width,getHeight());
-		viewport.setBounds(width,0,getWidth()-width,getHeight());
+		editView.setBounds(width,0,getWidth()-width,getHeight());
 	}
-
-	public void actionPerformed(ActionEvent arg0) {
-		// NEW
-		if (arg0.getActionCommand().equals("new")) {
-			viewport.init();
-			options.refreshFloorsList(0);
-		}
+	
+	private String save() {
+		Scene theScene = editView.getScene();
+		String result = "";
 		
-		// OPEN
-		if (arg0.getActionCommand().equals("open")) {
-			// Create a file chooser
-			JFileChooser fc = new JFileChooser();
-
-			// Open it
-			if (fc.showOpenDialog(this) == JFileChooser.APPROVE_OPTION) {
-				try {
-					viewport.open(new FileInputStream(fc.getSelectedFile()));
-					
-				} catch (IOException e) {
-					JOptionPane.showMessageDialog(null, "Error reading file");
-				}
-			}
-			
-			options.refreshFloorsList(0);
-		}
+		// Start position
+		for (int i=0; i<3; i++) result += theScene.startPosition[i] + " ";
+		result += "\n";
 		
-		// SAVE
-		if (arg0.getActionCommand().equals("save")) {
-			// Create a file chooser
-			JFileChooser fc = new JFileChooser();
-
-			// Save it
-			if (fc.showSaveDialog(this) == JFileChooser.APPROVE_OPTION) {
-				try {
-					FileWriter f = new FileWriter(fc.getSelectedFile());
-					f.write(viewport.save());
-					f.close();
-				} catch (IOException e) {
-					JOptionPane.showMessageDialog(null, "Error writing file");
-				}
+		// Deltas
+		result += theScene.getDeltaXY() + " " + theScene.getDeltaZ() + "\n";
+		
+		// Repeat
+		result += theScene.getRepeat() + "\n";
+		
+		// Objects
+		for (Vector<SceneObject> currentFloor : theScene.getFloors()) {
+			result += "-\n";
+			for (SceneObject currentObject : currentFloor) {
+				result += currentObject.type + " " + currentObject.position[0] + " " + currentObject.position[1] + "\n";
 			}
 		}
 		
-		// CHANGE LANGUAGE
-		if (arg0.getActionCommand().startsWith("lang-")) {
-			Config.change(arg0.getActionCommand().substring(5));
-			reloadLang();
-		}
-
-		viewport.repaint();
+		return result;
 	}
-
-	public void componentHidden(ComponentEvent arg0) {}
-	public void componentMoved(ComponentEvent arg0) {}
-	public void componentResized(ComponentEvent arg0) {
-		Reposition();
-		repaint();
-	}
-	public void componentShown(ComponentEvent arg0) {}
-
-
 }
