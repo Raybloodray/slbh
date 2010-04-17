@@ -1,4 +1,4 @@
-Content:
+Contenu:
 <wiki:toc/>
 =Bases=
  * Comment utiliser le logiciel
