@@ -18,7 +18,7 @@ http://slbh.pgon.ca/maze-sl.jpg
 =The Babel Tour=
 With this tool, you can create all the floors you want and then simply says to replicate them 5 times or more. This will make a Babel Tour. The option is in the "Properties" dialog.
 
-Here is an example with 2 floors:
+Here is an example with 2 floors ([http://slbh.pgon.ca/babel.lsl that you can get here]):
 
 http://slbh.pgon.ca/babel-editor.jpg
 
