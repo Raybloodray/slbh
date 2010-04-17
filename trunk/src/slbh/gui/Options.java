@@ -53,19 +53,19 @@ public class Options extends JPanel implements ActionListener, ItemListener {
 	public void actionPerformed(ActionEvent e) {
 		if (e.getActionCommand().compareTo("floorCreateB") == 0) {
 			int current = Integer.valueOf((String) floors.getSelectedItem()).intValue();
-			makeCombo(myViewport.createFloor(current, false));
+			refreshFloorsList(myViewport.createFloor(current, false));
 			return;
 		}
 		
 		if (e.getActionCommand().compareTo("floorCreateA") == 0) {
 			int current = Integer.valueOf((String) floors.getSelectedItem()).intValue();
-			makeCombo(myViewport.createFloor(current, true));
+			refreshFloorsList(myViewport.createFloor(current, true));
 			return;
 		}
 		
 		if (e.getActionCommand().compareTo("floorRemove") == 0) {
 			int current = Integer.valueOf((String) floors.getSelectedItem()).intValue();
-			makeCombo(myViewport.removeFloor(current));
+			refreshFloorsList(myViewport.removeFloor(current));
 			return;
 		}
 		
@@ -95,7 +95,7 @@ public class Options extends JPanel implements ActionListener, ItemListener {
 			myViewport.changeFloor(Integer.valueOf((String) floors.getSelectedItem()).intValue());
 	}
 
-	public void makeCombo(int selected) {
+	public void refreshFloorsList(int selected) {
 		floors.removeAllItems();
 		int size = myViewport.numberOfFloors();
 		for (int i=0; i<size; i++) floors.addItem(String.valueOf(i));
