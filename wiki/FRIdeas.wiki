@@ -7,3 +7,9 @@ Voici un exemple de structure qui se répète.
 Voici un exemple de Labyrinthe. Il suffit d'ajouter un toit pour ne pas gâcher le plaisir.
 
 <wiki:video url="http://www.youtube.com/watch?v=PbTHEm8Ggdw"/>
+
+=Pyramide=
+Voici comment créer une pyramide.
+
+<wiki:video url="http://www.youtube.com/watch?v=dnVJda3Jd68"/>
+
