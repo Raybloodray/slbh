@@ -2,3 +2,8 @@
 Voici un exemple de structure qui se répète.
 
 <wiki:video url="http://www.youtube.com/watch?v=G5CFnlV85To"/>
+
+=Labyrinthe=
+Voici un exemple de Labyrinthe. Il suffit d'ajouter un toit pour ne pas gâcher le plaisir.
+
+<wiki:video url="http://www.youtube.com/watch?v=PbTHEm8Ggdw"/>
