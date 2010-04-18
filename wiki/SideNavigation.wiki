@@ -1,8 +1,8 @@
  * English
   * [ENDescription Description]
   * [ENTutorial Tutorial]
-  * [Ideas Idées]
+  * [ENIdeas Ideas]
  * Français
   * [FRDescription Description]
   * [FRTutorial Tutoriel]
-  * [Ideas Idées]
+  * [FRIdeas Idées]
