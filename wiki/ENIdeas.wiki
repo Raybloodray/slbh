@@ -1,0 +1,9 @@
+=Babel Tour=
+Here is an example of structure that repeat itself.
+
+<wiki:video url="http://www.youtube.com/watch?v=G5CFnlV85To"/>
+
+=Maze=
+Here is an example of maze. You just need to add a roof to have the pleasure of living this adventure.
+
+<wiki:video url="http://www.youtube.com/watch?v=PbTHEm8Ggdw"/>
