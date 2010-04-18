@@ -46,7 +46,7 @@ import slbh.scene.SceneObject;
 
 @SuppressWarnings("serial")
 public class Principal extends JFrame implements ComponentListener, ActionListener {
-	static final public String version = "DEV";
+	static final public String version = "1.0.0";
 	
 	// Program Entry
 	public static void main(String[] args) {
