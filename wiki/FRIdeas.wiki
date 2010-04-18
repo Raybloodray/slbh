@@ -1,3 +1,4 @@
 =Tour de babel=
 Voici un exemple de structure qui se répète.
+
 <wiki:video url="http://www.youtube.com/watch?v=G5CFnlV85To"/>
