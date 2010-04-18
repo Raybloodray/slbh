@@ -66,7 +66,9 @@ public class Scene {
 	public int createFloor(int number, boolean after) {
 		Vector<SceneObject> emptyFloor = new Vector<SceneObject>();
 		
-		if (after) {
+		if (floors.isEmpty()) {
+			floors.add(emptyFloor);
+		} else if (after) {
 			++number;
 			floors.insertElementAt(emptyFloor, number);
 		} else {

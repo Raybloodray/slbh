@@ -161,7 +161,7 @@ public class TopView2DEdit extends JComponent implements MouseListener, MouseMot
 	
 	public void init() {
 		myScene = new Scene();		
-		myScene.createFloor(0, false);
+		myScene.createFloor(0, true);
 		
 		setScene(myScene);
 		changeFloor(0);
