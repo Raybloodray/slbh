@@ -4,7 +4,7 @@ Contenu:
  * Comment utiliser le logiciel
  * Comment utiliser les scripts générés dans SecondLife
 
-<wiki:video url="http://www.youtube.com/watch?v=Awx30PAFj8c"/>
+<wiki:video url="http://www.youtube.com/watch?v=kDXURzZ9MEg"/>
 
 =Labyrinthe=
 Vous savez, réussir à trouver la sortie d'un labyrinthe sur papier est assez simple puisque nous voyons tout d'en haut. Par contre, lorsque mis à l'intérieur de ce piège, réussir à s'en sortir alors que tout semble identique, bonne chance.
