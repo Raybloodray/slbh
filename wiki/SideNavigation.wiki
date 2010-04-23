@@ -1,8 +1,6 @@
  * English
-  * [ENDescription Description]
-  * [ENTutorial Tutorial]
-  * [ENIdeas Ideas]
- * Français
-  * [FRDescription Description]
-  * [FRTutorial Tutoriel]
-  * [FRIdeas Idées]
+  * Developers
+   * [ENDevDescription Description]
+   * [ENDevRoadmap Documentation]
+   * [ENDevDocumentation Documentation]
+  * Users
