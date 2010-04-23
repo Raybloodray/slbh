@@ -2,7 +2,7 @@
   * [ENDescription Description]
   * [ENTutorial Tutorial]
   * [ENIdeas Ideas]
- * Français
+ * FranÃ§ais
   * [FRDescription Description]
   * [FRTutorial Tutoriel]
-  * [FRIdeas Idées]
+  * [FRIdeas IdÃ©es]
