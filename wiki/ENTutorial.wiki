@@ -4,7 +4,7 @@ Content:
  * How to use the features of this software
  * How to use the generated script in SecondLife
 
-<wiki:video url="http://www.youtube.com/watch?v=yodXY3E1GZo"/>
+<wiki:video url="http://www.youtube.com/watch?v=ELHDRHq0iw0"/>
 
 =The maze=
 You know, it is easy to successfully find the exit on a paper maze since you can see it all from top. But, when placed inside, to be able to exit when every sides look the same is more of a challenge.
